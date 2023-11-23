@@ -1,0 +1,172 @@
+﻿@model SmartHome.Extend.StateData
+@{
+    ViewData["Title"] = "Index";
+    var temperature = string.Join(",", Model.temperature);
+    var humidity = string.Join(",", Model.humidity);
+    var water = string.Join(",", Model.water);
+    var gas = string.Join(",", Model.gas);
+    var light = string.Join(",", Model.light);
+}
+
+<div class="d-flex">
+    <div class="col-10">
+        <canvas height="80px" id="t"></canvas>
+    </div>
+    <div class="col-2 d-flex chart-number " style="color: #f42714;">
+        <text class="temperature">20°C</text>
+    </div>
+</div>
+<div class="d-flex">
+    <div class="col-10">
+        <canvas height="50px" id="h"></canvas>
+
+    </div>
+    <div class="col-2 d-flex chart-number " style="color: #51ee18;">
+        <text class="">20°C</text>
+    </div>
+</div>
+<div class="d-flex">
+    <div class="col-10">
+        <canvas height="80px" id="w"></canvas>
+    </div>
+    <div class="col-2 d-flex chart-number " style="color: #1990eb;">
+        <text class="">20°C</text>
+    </div>
+</div>
+<div class="d-flex">
+    <div class="col-10">
+        <canvas height="80px" id="g"></canvas>
+    </div>
+    <div class="col-2 d-flex chart-number " style="color: #A9A9A9;">
+        <text class="">20°C</text>
+    </div>
+</div>
+<script>
+
+
+    const t = document.getElementById('t');
+    let ctxT = new Chart(t, {
+        type: 'line',
+        data: {
+            labels: [@temperature],
+
+            datasets: [{
+                label: 'NHIỆT ĐỘ',
+                data: [@temperature],
+                fill: false,
+                tension: 0.2,
+                borderColor: '#D83F31',
+                backgroundColor: '#FF9B50',
+            }]
+        },
+        options: {
+            animation: {
+                duration: 0
+            },
+            scales: {
+                y: {
+                    min: 10,
+                    max: 50,
+                }
+            }
+        }
+
+
+    });
+    const h = document.getElementById('h');
+    let ctxH = new Chart(h, {
+        type: 'line',
+        data: {
+            labels: [@humidity],
+
+            datasets: [{
+                label: 'ĐỘ ẨM',
+                data: [@humidity],
+                fill: false,
+                tension: 0.2,
+                borderColor: '#A7D397',
+                backgroundColor: '#9FBB73',
+            }]
+        },
+        options: {
+            animation: {
+                duration: 0
+            },
+            scales: {
+                y: {
+                    min: 10,
+                    max: 110,
+                }
+            }
+        }
+
+
+    });
+    const w = document.getElementById('w');
+    let ctxW = new Chart(w, {
+        type: 'line',
+        data: {
+            labels: [@water],
+
+            datasets: [{
+                label: 'Mực nước',
+                data: [@water],
+                fill: false,
+                tension: 0.2
+            }]
+        },
+        options: {
+            animation: {
+                duration: 0
+            },
+            scales: {
+                y: {
+                    min: 10,
+                    max: 1000,
+                }
+            }
+        }
+    });
+    const g = document.getElementById('g');
+    let ctxG = new Chart(g, {
+        type: 'line',
+        data: {
+            labels: [@gas],
+
+            datasets: [{
+                label: 'GAS',
+                data: [@gas],
+                fill: false,
+                tension: 0.2,
+                borderColor: '#4D4C7D',
+                backgroundColor: '#A9A9A9',
+            }]
+        },
+        options: {
+            animation: {
+                duration: 0
+            },
+            scales: {
+                y: {
+                    min: 100,
+                    max: 1000,
+                }
+            }
+        }
+
+
+    });
+
+    @* var x = fetch('http://localhost:5257/DashBoard/GetStateData?n=8')
+        .then(response => response.json())
+        .then(commits => {
+        console.log(commits);
+        });
+        setInterval(() => {
+        fetch('http://localhost:5257/DashBoard/GetStateData?n=8')
+        .then(response => response.json())
+        .then(commits => {
+        console.log(commits);
+        });
+        }, 1000) *@
+</script>
