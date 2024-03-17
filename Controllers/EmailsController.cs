@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API_Mail.Extend;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using SmartHome.Extend;
 using SmartHome.Models.Entity;
 
 namespace SmartHome.Controllers
@@ -12,18 +14,19 @@ namespace SmartHome.Controllers
     public class EmailsController : Controller
     {
         private readonly SmartHomeContext _context;
-
-        public EmailsController(SmartHomeContext context)
+        private readonly ISendMailService _sendmailservice;
+        public EmailsController(SmartHomeContext context, ISendMailService sendmailservice = null)
         {
             _context = context;
+            _sendmailservice = sendmailservice;
         }
 
         // GET: Emails
         public async Task<IActionResult> Index()
         {
-              return _context.Emails != null ? 
-                          View(await _context.Emails.ToListAsync()) :
-                          Problem("Entity set 'SmartHomeContext.Emails'  is null.");
+            return _context.Emails != null ?
+                        View(await _context.Emails.ToListAsync()) :
+                        Problem("Entity set 'SmartHomeContext.Emails'  is null.");
         }
 
         // GET: Emails/Details/5
@@ -149,14 +152,39 @@ namespace SmartHome.Controllers
             {
                 _context.Emails.Remove(email);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        public async Task<IActionResult> MySendMail()
+        {
+            var newNotice = new Notice(){
+                thongBao = "Thông báo mới từ toà nhà"
+            };
+            return View(newNotice);
+
+        }
+        [HttpPost]
+        public async Task<IActionResult> MySendMail(Notice thongBaoMoi)
+        {
+            var listMail = _context.Emails.ToList();
+            foreach (var mail in listMail)
+            {
+                MailContent mailMontent = new MailContent
+                {
+                    To = mail.Gmail,
+                    Subject = "Thư gửi từ ban quản lý",
+                    Body = thongBaoMoi.thongBao
+                };
+                await _sendmailservice.SendMail(mailMontent);
+            }
+            return RedirectToAction("Index");
+        }
+
 
         private bool EmailExists(int id)
         {
-          return (_context.Emails?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Emails?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

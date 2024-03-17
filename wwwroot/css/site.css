@@ -33,3 +33,11 @@ body {
 	justify-content: end;
   text-shadow: rgb(189, 182, 182)1px 0 10px;
 }
+
+.state{
+	font-size: 40px;
+	font-weight: bold;
+	border: 2px solid black;
+	padding: 10px 50px;
+	box-shadow: 2px 2px;
+};

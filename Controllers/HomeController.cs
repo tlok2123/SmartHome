@@ -18,7 +18,7 @@ namespace SmartHome.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult Camera()
         {
             return View();
         }

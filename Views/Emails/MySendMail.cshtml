@@ -1,0 +1,19 @@
+@model SmartHome.Extend.Notice
+@{
+    ViewData["Title"] = "MySendMail";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div>
+    <form asp-action="MySendMail">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="thongBao" class="control-label">Thông báo mới</label>
+            <input asp-for="thongBao" class="form-control" />
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-primary" />
+        </div>
+    </form>
+</div>

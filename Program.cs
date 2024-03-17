@@ -1,3 +1,4 @@
+using API_Mail.Extend;
 using Microsoft.EntityFrameworkCore;
 using SmartHome.Models.Entity;
 using System;
@@ -6,7 +7,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
+// mail
+// mail
+builder.Services.AddOptions();                                         // Kích hoạt Options
+var mailsettings = builder.Configuration.GetSection("MailSettings");  // đọc config
+builder.Services.Configure<MailSettings>(mailsettings);
+builder.Services.AddTransient<ISendMailService, SendMailService>();
 
 // thiet lapdich vu sql
 var connectString = builder.Configuration.GetConnectionString("AppDb"); // chuuoi ket noi

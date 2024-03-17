@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SmartHome.Models.Entity;
 using SmartHome.Extend;
+using API_Mail.Extend;
 namespace SmartHome.Controllers
 {
     public class DashBoardController : Controller
@@ -14,7 +15,7 @@ namespace SmartHome.Controllers
 
         public IActionResult Index()
         {
-            var listState = GetStateData(200);
+            var listState = GetStateData(50);
 
 
             return View(listState);
@@ -31,6 +32,34 @@ namespace SmartHome.Controllers
             return state;
 
         }
+        public SecurityLog LastStateData()
+        {
+            var last = _context.SecurityLogs.OrderByDescending(l => l.Id).FirstOrDefault();
+            return last;
+        }
+       
+        public string IsWarning(int n)
+        {
+            var last = _context.SecurityLogs.OrderByDescending(l => l.Id).Take(n).Select(l => l.State).ToList();
+            var check = true;
+            foreach (var item in last)
+            {
+                if (item != last[0])
+                {
+                    check = false;
+                }
+            }
+            if (check)
+            {
+                return last[0];
+            }
+            else
+            {
+                return "Stable";
+            }
+
+        }
+
     }
-    
+
 }

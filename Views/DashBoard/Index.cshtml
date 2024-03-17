@@ -7,42 +7,53 @@
     var gas = string.Join(",", Model.gas);
     var light = string.Join(",", Model.light);
 }
+<div class="d-flex justify-content-center align-item-center">
+    <text class="state">
+        ...
+    </text>
+</div>
+
+<br>
+<br>
 
 <div class="d-flex">
     <div class="col-10">
-        <canvas height="80px" id="t"></canvas>
+        <canvas height="40px" id="t"></canvas>
     </div>
     <div class="col-2 d-flex chart-number " style="color: #f42714;">
-        <text class="temperature">20°C</text>
+        <text class="temperature">...</text>
     </div>
 </div>
+<br>
 <div class="d-flex">
     <div class="col-10">
-        <canvas height="50px" id="h"></canvas>
+        <canvas height="40px" id="h"></canvas>
 
     </div>
     <div class="col-2 d-flex chart-number " style="color: #51ee18;">
-        <text class="">20°C</text>
+        <text class="humidity">...</text>
     </div>
 </div>
+<br>
+
 <div class="d-flex">
     <div class="col-10">
-        <canvas height="80px" id="w"></canvas>
+        <canvas height="40px" id="w"></canvas>
     </div>
     <div class="col-2 d-flex chart-number " style="color: #1990eb;">
-        <text class="">20°C</text>
+        <text class="water">...</text>
     </div>
 </div>
+<br>
 <div class="d-flex">
     <div class="col-10">
-        <canvas height="80px" id="g"></canvas>
+        <canvas height="40px" id="g"></canvas>
     </div>
     <div class="col-2 d-flex chart-number " style="color: #A9A9A9;">
-        <text class="">20°C</text>
+        <text class="gas">...</text>
     </div>
 </div>
 <script>
-
 
     const t = document.getElementById('t');
     let ctxT = new Chart(t, {
@@ -57,22 +68,39 @@
                 tension: 0.2,
                 borderColor: '#D83F31',
                 backgroundColor: '#FF9B50',
+                //pointStyle: false
+
             }]
         },
         options: {
             animation: {
-                duration: 0
+                // duration: 0
             },
             scales: {
                 y: {
                     min: 10,
                     max: 50,
+                },
+                x: {
+
+                    display: true //this will remove only the label
+
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true,
+
                 }
             }
         }
 
 
     });
+    //
+
+
+
     const h = document.getElementById('h');
     let ctxH = new Chart(h, {
         type: 'line',
@@ -86,11 +114,13 @@
                 tension: 0.2,
                 borderColor: '#A7D397',
                 backgroundColor: '#9FBB73',
+                // pointStyle: false
+
             }]
         },
         options: {
             animation: {
-                duration: 0
+                //duration: 0
             },
             scales: {
                 y: {
@@ -112,12 +142,15 @@
                 label: 'Mực nước',
                 data: [@water],
                 fill: false,
-                tension: 0.2
+                tension: 0.2,
+                //pointStyle: false
+
             }]
+
         },
         options: {
             animation: {
-                duration: 0
+                //duration: 0
             },
             scales: {
                 y: {
@@ -140,11 +173,12 @@
                 tension: 0.2,
                 borderColor: '#4D4C7D',
                 backgroundColor: '#A9A9A9',
+                // pointStyle: false
             }]
         },
         options: {
             animation: {
-                duration: 0
+                //duration: 0
             },
             scales: {
                 y: {
@@ -152,10 +186,97 @@
                     max: 1000,
                 }
             }
-        }
+        },
+
 
 
     });
+    var last;
+    var temperature = $('.temperature')
+    var humidity = $('.humidity')
+    var water = $('.water')
+    var gas = $('.gas')
+    var state = $('.state')
+    setInterval(function () {
+        async function run() {
+            let response = await fetch('http://localhost:5257/DashBoard/laststatedata');
+            last = await response.json();
+            temperature.text(last.temperature + '🔥')
+            humidity.text(last.humidity + '🌳')
+            water.text(last.water + '💦')
+            gas.text(last.gas + '💥')
+            state.text(last.state)
+
+            // tem
+            let newLableT = ctxT.data.labels;
+            let newDataT = ctxT.data.datasets[0].data
+            newLableT.shift()
+            newLableT.push(last.temperature)
+            newDataT.shift()
+            newDataT.push(last.temperature)
+            ctxT.update()
+
+            //hu
+            let newLableH = ctxH.data.labels;
+            let newDataH = ctxH.data.datasets[0].data
+            newLableH.shift()
+            newLableH.push(last.humidity)
+            newDataH.shift()
+            newDataH.push(last.humidity)
+            ctxH.update()
+
+            //wa
+            let newLableW = ctxW.data.labels;
+            let newDataW = ctxW.data.datasets[0].data
+            newLableW.shift()
+            newLableW.push(last.water)
+            newDataW.shift()
+            newDataW.push(last.water)
+            ctxW.update()
+
+            //ga
+            let newLableG = ctxG.data.labels;
+            let newDataG = ctxG.data.datasets[0].data
+            newLableG.shift()
+            newLableG.push(last.gas)
+            newDataG.shift()
+            newDataG.push(last.gas)
+            ctxG.update()
+
+
+
+            // check 5 state
+            let isWaring = await fetch('http://localhost:5257/DashBoard/iswarning?n=2')
+            isWaring = await isWaring.text()
+            if (isWaring == 'Stable') {
+                await fetch('https://dweet.io/dweet/for/dnu_cntt1504_nhom2_notice?state=Stable&duration=1000&warning=no')
+            } else {
+                console.log("CanhBao");
+                if (last.state != 'Stable' &&  last.state != "Humidity") {
+                    //state
+                    Toastify({
+                        text: isWaring,
+                        duration: 5000,
+                        close: true,
+                        gravity: "bottom", // `top` or `bottom`
+                        position: "right", // `left`, `center` or `right`
+                        style: {
+                            background: "linear-gradient(to right, #B31312, #F4CE14)",
+                        },
+                    }).showToast()
+                await fetch(`https://dweet.io/dweet/for/dnu_cntt1504_nhom2_notice?state=${isWaring}&duration=3000&warning=yes`)
+
+                }
+             //   await fetch(`https://dweet.io/dweet/for/dnu_cntt1504_nhom2_notice?state=${isWaring}&duration=3000&warning=yes`)
+
+            }
+        }
+        run()
+
+    }, 300)
+
+
+
 
     @* var x = fetch('http://localhost:5257/DashBoard/GetStateData?n=8')
         .then(response => response.json())

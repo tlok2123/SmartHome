@@ -21,4 +21,8 @@ namespace SmartHome.Extend
         public List<float> gas { get; set; }
         public List<float> light { get; set; }
     }
+    public class Notice
+    {
+        public string thongBao { get; set; }
+    }
 }
