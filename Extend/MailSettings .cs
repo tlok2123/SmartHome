@@ -44,7 +44,6 @@ namespace API_Mail.Extend
         {
             mailSettings = _mailSettings.Value;
             logger = _logger;
-            logger.LogInformation("Create SendMailService");
         }
 
         // Gửi email, theo nội dung trong mailContent

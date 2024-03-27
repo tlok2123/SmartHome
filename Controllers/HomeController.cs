@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace SmartHome.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;
 
@@ -15,6 +15,7 @@ namespace SmartHome.Controllers
 
         public IActionResult Index()
         {
+print(CurrentUser);
             return View();
         }
 

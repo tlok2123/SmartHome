@@ -8,7 +8,7 @@
 	<div class="flex-grow-0">
 		<img class="img-video"
 			style="display: block;-webkit-user-select: none;margin: auto;background-color: hsl(0, 0%, 25%);"
-			src="http://127.0.0.1:5000/video_feed" width="578" height="433">
+			src="http://127.0.0.1:5000/video_feed?src=http://14.161.31.172:81/asp/video.cgi&&conf=50&&lever=50" width="578" height="433">
 
 	</div>
 	<div class="flex-grow-1">
@@ -21,11 +21,17 @@
 			<input type="range" class="form-range w-50 ip-conf" min="1" max="100" step="1" id="customRange3">
 		</div>
 		<div class="d-flex justify-content-between ps-4 align-items-center gap-3">
-			<label for="customRange3" class="form-label fs-5 text-center">Mức độ cảnh báo</label>
+			<label for="customRange3" class="form-label fs-5 text-center">Ngưỡng cảnh báo</label>
 			<p class="fs-4 p-lever"
 				style="color: red; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">
 				50</p>
 			<input type="range" class="form-range w-50 ip-lever" min="1" max="100" step="1" id="customRange3">
+		</div>
+		<div class="mx-4">
+			<div class="form-floating mb-3">
+				<input type="password" class="form-control ip-source" id="floatingInput" placeholder="http://14.161.31.172:81/asp/video.cgi" value="">
+				<label for="floatingInput">Nguồn hình ảnh</label>
+			</div>
 		</div>
 		<button type="button" class="btn btn-primary ms-3 btn-reset">Khởi động lại</button>
 	</div>
@@ -39,6 +45,7 @@
 	let p_lever = document.querySelector(".p-lever")
 	let video = document.querySelector(".img-video")
 	let reset = document.querySelector(".btn-reset")
+	let ip_source = document.querySelector(".ip-source")
 	console.log(ip_conf);
 	ip_conf.oninput = function () {
 		p_conf.innerHTML = ip_conf.value
@@ -52,13 +59,13 @@
 		video.src = "http://127.0.0.1:5000/video_feed?conf=" + p_conf.innerHTML + "&&lever=" + p_lever.innerHTML
 
 	}
-	reset.onclick =async function () {
+	reset.onclick = async function () {
 		p_conf.innerHTML = 50
 		p_lever.innerHTML = 50
-		 ip_lever.value = 50
-		 ip_conf.value = 50
-		video.src = "http://127.0.0.1:5000/video_feed?conf=" + p_conf.innerHTML + "&&lever=" + p_lever.innerHTML
-		 await fetch('https://dweet.io/dweet/for/dnu_cntt1504_nhom2_notice?state=Stable&duration=1000&warning=no')
+		ip_lever.value = 50
+		ip_conf.value = 50
+		video.src = "http://127.0.0.1:5000/video_feed?conf=" + p_conf.innerHTML + "&&lever=" + p_lever.innerHTML + "&&src="+ ip_source.value
+		await fetch('https://dweet.io/dweet/for/dnu_cntt1504_nhom2_notice?state=Stable&duration=1000&warning=no')
 
 	}
 

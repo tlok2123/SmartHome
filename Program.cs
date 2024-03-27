@@ -2,6 +2,7 @@ using API_Mail.Extend;
 using Microsoft.EntityFrameworkCore;
 using SmartHome.Models.Entity;
 using System;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,16 +14,16 @@ builder.Services.AddOptions();                                         // Kích 
 var mailsettings = builder.Configuration.GetSection("MailSettings");  // đọc config
 builder.Services.Configure<MailSettings>(mailsettings);
 builder.Services.AddTransient<ISendMailService, SendMailService>();
-
+builder.Services.AddSession();
 // thiet lapdich vu sql
 var connectString = builder.Configuration.GetConnectionString("AppDb"); // chuuoi ket noi
-
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddDbContext<SmartHomeContext>(o =>
 {
     o.UseSqlServer(connectString).LogTo(Console.WriteLine, LogLevel.None);
 });
 var app = builder.Build();
-
+app.UseSession();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

@@ -11,7 +11,7 @@ using SmartHome.Models.Entity;
 
 namespace SmartHome.Controllers
 {
-    public class EmailsController : Controller
+    public class EmailsController : BaseController
     {
         private readonly SmartHomeContext _context;
         private readonly ISendMailService _sendmailservice;
@@ -24,6 +24,10 @@ namespace SmartHome.Controllers
         // GET: Emails
         public async Task<IActionResult> Index()
         {
+            if (IsLogin)
+            {
+                return RedirectToAction("index", "home");
+            }
             return _context.Emails != null ?
                         View(await _context.Emails.ToListAsync()) :
                         Problem("Entity set 'SmartHomeContext.Emails'  is null.");
@@ -158,7 +162,8 @@ namespace SmartHome.Controllers
         }
         public async Task<IActionResult> MySendMail()
         {
-            var newNotice = new Notice(){
+            var newNotice = new Notice()
+            {
                 thongBao = "Thông báo mới từ toà nhà"
             };
             return View(newNotice);
@@ -176,9 +181,27 @@ namespace SmartHome.Controllers
                     Subject = "Thư gửi từ ban quản lý",
                     Body = thongBaoMoi.thongBao
                 };
-                await _sendmailservice.SendMail(mailMontent);
+              await  _sendmailservice.SendMail(mailMontent);
             }
             return RedirectToAction("Index");
+        }
+        [HttpGet]
+        public async Task<IActionResult> MySendMailAPI(Notice thongBaoMoi)
+        {
+            var notice = Request.Query["notice"];
+        // print(notice);
+            var listMail = _context.Emails.ToList();
+            foreach (var mail in listMail)
+            {
+                MailContent mailMontent = new MailContent
+                {
+                    To = mail.Gmail,
+                    Subject = "Thư gửi từ ban quản lý",
+                    Body = notice
+                };
+                await _sendmailservice.SendMail(mailMontent);
+            }
+            return Json("");
         }
 
 
