@@ -1,4 +1,5 @@
-﻿@{
+﻿@model List<SmartHome.Models.Entity.Log>;
+@{
 	ViewData["Title"] = "Camera an ninh";
 }
 <h1>@ViewData["Title"]</h1>
@@ -8,7 +9,7 @@
 	<div class="flex-grow-0">
 		<img class="img-video"
 			style="display: block;-webkit-user-select: none;margin: auto;background-color: hsl(0, 0%, 25%);"
-			src="http://127.0.0.1:5000/video_feed?src=http://14.161.31.172:81/asp/video.cgi&&conf=50&&lever=50" width="578" height="433">
+			src="http://127.0.0.1:5000/video_feed?src=http://165.234.49.200/mjpg/video.mjpg&&conf=50&&lever=50" width="578" height="433">
 
 	</div>
 	<div class="flex-grow-1">
@@ -29,7 +30,7 @@
 		</div>
 		<div class="mx-4">
 			<div class="form-floating mb-3">
-				<input type="password" class="form-control ip-source" id="floatingInput" placeholder="http://14.161.31.172:81/asp/video.cgi" value="">
+				<input type="password" class="form-control ip-source" id="floatingInput" value="http://165.234.49.200/mjpg/video.mjpg" value="">
 				<label for="floatingInput">Nguồn hình ảnh</label>
 			</div>
 		</div>
@@ -38,6 +39,12 @@
 
 
 </div>
+<hr>
+<h3>Lịch sử bất thường</h3>
+@foreach(var item in Model){	
+	<p>Phát hiện nguồn cháy bất thường vào thời điểm: @item.Time</p>
+}
+
 <script>
 	let ip_conf = document.querySelector(".ip-conf")
 	let ip_lever = document.querySelector(".ip-lever")

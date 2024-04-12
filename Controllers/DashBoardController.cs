@@ -4,7 +4,7 @@ using SmartHome.Extend;
 using API_Mail.Extend;
 namespace SmartHome.Controllers
 {
-    public class DashBoardController : Controller
+    public class DashBoardController : BaseController
     {
         private readonly SmartHomeContext _context;
 
@@ -20,9 +20,23 @@ namespace SmartHome.Controllers
 
             return View(listState);
         }
+        [HttpGet]
+        public async void AddLogAPI()
+        {
+            string status = Request.Query["status"];
+            DateTime time = DateTime.Now;
+            Log log = new Log() { Status = status, Time = time };
+            
+            _context.Add(log);
+            // print(log.Status);
+            // print(log.Time.ToString());
+             _context.SaveChanges();
+
+
+        }
         public StateData GetStateData(int n)
         {
-            var listItem = _context.SecurityLogs.Take(n);
+            var listItem = _context.SecurityLogs.OrderByDescending(l => l.Id).Take(n);
             var state = new StateData();
             state.temperature = listItem.Select(i => (float)i.Temperature).ToList();
             state.humidity = listItem.Select(i => (float)i.Humidity).ToList();
@@ -37,7 +51,7 @@ namespace SmartHome.Controllers
             var last = _context.SecurityLogs.OrderByDescending(l => l.Id).FirstOrDefault();
             return last;
         }
-       
+
         public string IsWarning(int n)
         {
             var last = _context.SecurityLogs.OrderByDescending(l => l.Id).Take(n).Select(l => l.State).ToList();

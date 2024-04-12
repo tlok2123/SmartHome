@@ -249,7 +249,7 @@
             let isWaring = await fetch('http://localhost:5257/DashBoard/iswarning?n=2')
             isWaring = await isWaring.text()
             if (isWaring == 'Stable') {
-                await fetch('https://dweet.io/dweet/for/dnu_cntt1504_nhom2_notice?state=Stable&duration=1000&warning=no')
+               // await fetch('https://dweet.io/dweet/for/dnu_cntt1504_nhom2_notice?state=Stable&duration=1000&warning=no')
             } else {
                 console.log("CanhBao");
                 if (last.state != 'Stable' &&  last.state != "Humidity") {
@@ -264,7 +264,7 @@
                             background: "linear-gradient(to right, #B31312, #F4CE14)",
                         },
                     }).showToast()
-                await fetch(`https://dweet.io/dweet/for/dnu_cntt1504_nhom2_notice?state=${isWaring}&duration=3000&warning=yes`)
+            //    await fetch(`https://dweet.io/dweet/for/dnu_cntt1504_nhom2_notice?state=${isWaring}&duration=3000&warning=yes`)
 
                 }
              //   await fetch(`https://dweet.io/dweet/for/dnu_cntt1504_nhom2_notice?state=${isWaring}&duration=3000&warning=yes`)
