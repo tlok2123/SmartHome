@@ -9,7 +9,7 @@
 	<div class="flex-grow-0">
 		<img class="img-video"
 			style="display: block;-webkit-user-select: none;margin: auto;background-color: hsl(0, 0%, 25%);"
-			src="http://127.0.0.1:5000/video_feed?src=http://165.234.49.200/mjpg/video.mjpg&&conf=50&&lever=50" width="578" height="433">
+			src="http://127.0.0.1:5000/video_feed?src=http://178.46.128.247:8091/mjpg/video.mjpg&&conf=50&&lever=50" width="578" height="433">
 
 	</div>
 	<div class="flex-grow-1">
@@ -30,7 +30,7 @@
 		</div>
 		<div class="mx-4">
 			<div class="form-floating mb-3">
-				<input type="password" class="form-control ip-source" id="floatingInput" value="http://165.234.49.200/mjpg/video.mjpg" value="">
+				<input type="password" class="form-control ip-source" id="floatingInput" value="http://178.46.128.247:8091/mjpg/video.mjpg" value="">
 				<label for="floatingInput">Nguồn hình ảnh</label>
 			</div>
 		</div>
@@ -57,13 +57,13 @@
 	ip_conf.oninput = function () {
 		p_conf.innerHTML = ip_conf.value
 		console.log(ip_conf.value);
-		video.src = "http://127.0.0.1:5000/video_feed?conf=" + p_conf.innerHTML + "&&lever=" + p_lever.innerHTML
+		video.src = "http://127.0.0.1:5000/video_feed?conf=" + p_conf.innerHTML + "&&lever=" + p_lever.innerHTML + "&&src="+ ip_source.value
 		console.log(video.src);
 	}
 	ip_lever.oninput = function () {
 		p_lever.innerHTML = ip_lever.value
 		console.log(ip_lever.value);
-		video.src = "http://127.0.0.1:5000/video_feed?conf=" + p_conf.innerHTML + "&&lever=" + p_lever.innerHTML
+		video.src = "http://127.0.0.1:5000/video_feed?conf=" + p_conf.innerHTML + "&&lever=" + p_lever.innerHTML + "&&src="+ ip_source.value
 
 	}
 	reset.onclick = async function () {
