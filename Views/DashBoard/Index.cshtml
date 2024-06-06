@@ -199,7 +199,7 @@
     var state = $('.state')
     setInterval(function () {
         async function run() {
-            let response = await fetch('http://localhost:5257/DashBoard/laststatedata');
+            let response = await fetch('http://192.168.137.136:5257/DashBoard/laststatedata');
             last = await response.json();
             temperature.text(last.temperature + '🔥')
             humidity.text(last.humidity + '🌳')
@@ -246,7 +246,7 @@
 
 
             // check 5 state
-            let isWaring = await fetch('http://localhost:5257/DashBoard/iswarning?n=2')
+            let isWaring = await fetch('http://192.168.137.136:5257/DashBoard/iswarning?n=2')
             isWaring = await isWaring.text()
             if (isWaring == 'Stable') {
                // await fetch('https://dweet.io/dweet/for/dnu_cntt1504_nhom2_notice?state=Stable&duration=1000&warning=no')
@@ -278,13 +278,13 @@
 
 
 
-    @* var x = fetch('http://localhost:5257/DashBoard/GetStateData?n=8')
+    @* var x = fetch('http://192.168.137.136:5257/DashBoard/GetStateData?n=8')
         .then(response => response.json())
         .then(commits => {
         console.log(commits);
         });
         setInterval(() => {
-        fetch('http://localhost:5257/DashBoard/GetStateData?n=8')
+        fetch('http://192.168.137.136:5257/DashBoard/GetStateData?n=8')
         .then(response => response.json())
         .then(commits => {
         console.log(commits);

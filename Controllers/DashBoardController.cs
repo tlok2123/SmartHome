@@ -26,11 +26,11 @@ namespace SmartHome.Controllers
             string status = Request.Query["status"];
             DateTime time = DateTime.Now;
             Log log = new Log() { Status = status, Time = time };
-            
+            System.Console.WriteLine("jhii");
             _context.Add(log);
             // print(log.Status);
             // print(log.Time.ToString());
-             _context.SaveChanges();
+            _context.SaveChanges();
 
 
         }
@@ -44,6 +44,14 @@ namespace SmartHome.Controllers
             state.gas = listItem.Select(i => (float)i.Gas).ToList();
             state.light = listItem.Select(i => (float)i.Light).ToList();
             return state;
+
+        }
+        public bool GetLastFire()
+        {
+            var listItem = _context.Logs.OrderByDescending(l => l.Id).ToList();
+            DateTime t2 = DateTime.Now;
+            TimeSpan difference = (TimeSpan)(t2 - listItem[0].Time );
+            return difference.CompareTo(TimeSpan.FromSeconds(5)) < 0;
 
         }
         public SecurityLog LastStateData()

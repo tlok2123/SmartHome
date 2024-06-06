@@ -40,6 +40,21 @@ namespace SmartHome.Controllers.Account
             CurrentUser = userLogin.Username;
             return RedirectToAction("index","home");
         }
+        [HttpGet]
+        public  bool LoginAPI(string name, string pass)
+        {
+
+            var user =  _context.Users.FirstOrDefault(u => u.Username == name);
+            if (user == null)
+            {
+                return false;
+            }
+            if (user.Password != pass)
+            {
+                return false;
+            }
+           return true;
+        }
         // GET: Account
         public async Task<IActionResult> Index()
         {
